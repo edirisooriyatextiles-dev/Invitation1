@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&amp;family=Hanken+Grotesk:wght@300;400;500;600;700&amp;family=Cinzel:wght@500;600;700;800&amp;family=Noto+Sans+Sinhala:wght@400;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;background-color:#0b1130;color:#f8f7f2;-webkit-tap-highlight-color:transparent;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}
+/* Wax Seal & Envelope Custom Keyframes & 3D styling */
+.perspective-1000 { perspective: 1000px; }
+.transform-style-3d { transform-style: preserve-3d; }
+.backface-hidden { backface-visibility: hidden; }
+
+@keyframes waxGlowPulse {
+  0%, 100% { box-shadow: 0 0 18px rgba(229, 169, 60, 0.4), 0 0 38px rgba(217, 155, 38, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -3px 6px rgba(11, 17, 48, 0.8); }
+  50% { box-shadow: 0 0 32px rgba(229, 169, 60, 0.75), 0 0 55px rgba(217, 155, 38, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.55), inset 0 -3px 6px rgba(11, 17, 48, 0.8); }
+}
+
+@keyframes promptBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.95; }
+  50% { transform: translateY(3px); opacity: 1; }
+}
+
+.animate-wax-glow {
+  animation: waxGlowPulse 2.8s ease-in-out infinite;
+}
+.animate-prompt-pulse {
+  animation: promptBounce 2s ease-in-out infinite;
+}
+
+/* Wax crack & seal pop animation */
+.seal-breaking {
+  transform: scale(1.15) !important;
+  opacity: 0 !important;
+  filter: blur(2px);
+  transition: all 0.65s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Envelope flap flip */
+.flap-opened {
+  transform: rotateX(178deg) !important;
+  z-index: 5 !important;
+}
+
+/* Envelope smooth exit */
+.envelope-slide-out {
+  transform: translateY(115%) scale(0.92);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.8s ease;
+}
+
+/* Sparkle particles */
+@keyframes sparkFlight {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: var(--tw-sparkle-target); opacity: 0; }
+}
+.sparkle-particle {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #ffe7aa 20%, #e5a93c 80%);
+  animation: sparkFlight 0.75s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Atmospheric Floating Gold Leaf Dust & Flecks */
+@keyframes goldDustFloat {
+  0% {
+    transform: translateY(105vh) translateX(0) rotate(0deg) scale(0.85);
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--dust-max-opacity, 0.5);
+  }
+  50% {
+    transform: translateY(50vh) translateX(var(--dust-sway, 18px)) rotate(180deg) scale(1);
+  }
+  85% {
+    opacity: var(--dust-max-opacity, 0.5);
+  }
+  100% {
+    transform: translateY(-8vh) translateX(calc(var(--dust-sway, 18px) * -0.7)) rotate(360deg) scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes goldShimmer {
+  0%, 100% {
+    filter: drop-shadow(0 0 1px rgba(229, 169, 60, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 4px rgba(255, 231, 170, 0.9)) drop-shadow(0 0 8px rgba(217, 155, 38, 0.6));
+  }
+}
+
+.gold-leaf-speck {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 35%, #fff9e6 0%, #ffd987 35%, #e5a93c 70%, #b87a17 100%);
+  will-change: transform, opacity;
+  animation-name: goldDustFloat, goldShimmer;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+}
+
+.gold-leaf-speck.fleck-irregular {
+  border-radius: 35% 65% 70% 30% / 45% 35% 65% 55%;
+}
+</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{
+  "primary":"#e5a93c",
+  "on-primary":"#0f1742",
+  "primary-container":"#d99b26",
+  "on-primary-container":"#0b1130",
+  "primary-fixed":"#fde3a4",
+  "primary-fixed-dim":"#e5a93c",
+  "secondary":"#f3ca76",
+  "on-secondary":"#0f1742",
+  "secondary-container":"#263378",
+  "on-secondary-container":"#fbe7be",
+  "secondary-fixed":"#ffe4a8",
+  "secondary-fixed-dim":"#f0c367",
+  "surface":"#0b1130",
+  "background":"#0b1130",
+  "on-surface":"#f8f7f2",
+  "on-background":"#f8f7f2",
+  "surface-container-lowest":"#070b20",
+  "surface-container-low":"#0f1742",
+  "surface-container":"#131c4e",
+  "surface-container-high":"#192462",
+  "surface-container-highest":"#202d75",
+  "surface-bright":"#263486",
+  "surface-dim":"#090e28",
+  "surface-variant":"#1a245a",
+  "on-surface-variant":"#c3c7de",
+  "outline":"#7780be",
+  "outline-variant":"#2b387c",
+  "tertiary":"#f8f7f2",
+  "on-tertiary":"#0f1742",
+  "tertiary-container":"#1c286a",
+  "on-tertiary-container":"#f3ca76",
+  "tertiary-fixed":"#e8eaf6",
+  "tertiary-fixed-dim":"#c3c7de",
+  "error":"#ffb4ab",
+  "on-error":"#690005",
+  "error-container":"#93000a",
+  "on-error-container":"#ffdad6"
+},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"space-xs":"0.25rem","space-md":"1rem","space-lg":"1.5rem","margin":"1.25rem","space-xl":"2.5rem","gutter":"1rem","space-sm":"0.5rem"},fontFamily:{"label-sm":["Hanken Grotesk"],"display":["Bodoni Moda"],"body-lg":["Hanken Grotesk"],"body-md":["Hanken Grotesk"],"headline-md":["Bodoni Moda"],"display-mobile":["Bodoni Moda"],"label-lg":["Hanken Grotesk"],"headline-lg-mobile":["Bodoni Moda"],"headline-lg":["Bodoni Moda"],"cinzel":["Cinzel","serif"],"sinhala":["Noto Sans Sinhala","sans-serif"]},fontSize:{"label-sm":["10px",{lineHeight:"14px",letterSpacing:"0.22em",fontWeight:"600"}],"display":["48px",{lineHeight:"52px",letterSpacing:"-0.02em",fontWeight:"400"}],"body-lg":["16px",{lineHeight:"26px",letterSpacing:"0.02em",fontWeight:"300"}],"body-md":["14px",{lineHeight:"22px",letterSpacing:"0.02em",fontWeight:"300"}],"headline-md":["22px",{lineHeight:"28px",letterSpacing:"0.01em",fontWeight:"500"}],"display-mobile":["36px",{lineHeight:"40px",letterSpacing:"-0.01em",fontWeight:"400"}],"label-lg":["12px",{lineHeight:"16px",letterSpacing:"0.18em",fontWeight:"500"}],"headline-lg-mobile":["26px",{lineHeight:"32px",letterSpacing:"0em",fontWeight:"400"}],"headline-lg":["32px",{lineHeight:"38px",letterSpacing:"-0.01em",fontWeight:"400"}]}}}};</script></head><body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col selection:bg-primary selection:text-on-primary">
+<!-- ================= LUXURY ENVELOPE & WAX SEAL OVERLAY ================= -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center bg-[#070b20]/95 backdrop-blur-2xl transition-all duration-700 overflow-hidden px-4" id="envelopeOverlay">
+<!-- Atmospheric Floating Gold Leaf Dust Container -->
+<div aria-hidden="true" class="absolute inset-0 pointer-events-none z-10 overflow-hidden" id="goldDustContainer">
+<!-- Organic Ambient Gold Leaf Flecks -->
+<span class="gold-leaf-speck fleck-irregular" style="left: 12%; width: 2.5px; height: 2.5px; --dust-max-opacity: 0.65; --dust-sway: 22px; animation-duration: 9.2s, 3.1s; animation-delay: -1.2s, -0.4s;"></span>
+<span class="gold-leaf-speck" style="left: 24%; width: 1.5px; height: 1.5px; --dust-max-opacity: 0.45; --dust-sway: -16px; animation-duration: 11.5s, 4.2s; animation-delay: -4.8s, -1.5s;"></span>
+<span class="gold-leaf-speck fleck-irregular" style="left: 35%; width: 3.2px; height: 2.2px; --dust-max-opacity: 0.7; --dust-sway: 18px; animation-duration: 8.7s, 2.6s; animation-delay: -6.1s, -0.8s;"></span>
+<span class="gold-leaf-speck" style="left: 48%; width: 1.2px; height: 1.2px; --dust-max-opacity: 0.35; --dust-sway: -20px; animation-duration: 13.0s, 3.8s; animation-delay: -2.4s, -2.1s;"></span>
+<span class="gold-leaf-speck fleck-irregular" style="left: 62%; width: 2.8px; height: 2.8px; --dust-max-opacity: 0.6; --dust-sway: 25px; animation-duration: 9.8s, 2.9s; animation-delay: -7.5s, -0.3s;"></span>
+<span class="gold-leaf-speck" style="left: 73%; width: 1.8px; height: 1.8px; --dust-max-opacity: 0.5; --dust-sway: -14px; animation-duration: 10.6s, 3.5s; animation-delay: -3.3s, -1.9s;"></span>
+<span class="gold-leaf-speck fleck-irregular" style="left: 85%; width: 3.5px; height: 2.5px; --dust-max-opacity: 0.68; --dust-sway: 19px; animation-duration: 8.4s, 2.4s; animation-delay: -5.7s, -1.1s;"></span>
+<span class="gold-leaf-speck" style="left: 92%; width: 1.4px; height: 1.4px; --dust-max-opacity: 0.4; --dust-sway: -12px; animation-duration: 12.2s, 4.5s; animation-delay: -8.9s, -2.7s;"></span>
+<span class="gold-leaf-speck" style="left: 8%; width: 1.8px; height: 1.8px; --dust-max-opacity: 0.5; --dust-sway: 15px; animation-duration: 10.1s, 3.2s; animation-delay: -8.1s, -1.8s;"></span>
+<span class="gold-leaf-speck fleck-irregular" style="left: 19%; width: 2.2px; height: 2.2px; --dust-max-opacity: 0.55; --dust-sway: -18px; animation-duration: 11.2s, 3.7s; animation-delay: -3.9s, -0.6s;"></span>
+<span class="gold-leaf-speck" style="left: 31%; width: 1.0px; height: 1.0px; --dust-max-opacity: 0.3; --dust-sway: 14px; animation-duration: 14.0s, 4.8s; animation-delay: -9.5s, -3.2s;"></span>
+<span class="gold-leaf-speck fleck-irregular" style="left: 42%; width: 3.8px; height: 2.6px; --dust-max-opacity: 0.72; --dust-sway: -24px; animation-duration: 8.1s, 2.2s; animation-delay: -1.7s, -0.5s;"></span>
+<span class="gold-leaf-speck" style="left: 55%; width: 1.6px; height: 1.6px; --dust-max-opacity: 0.42; --dust-sway: 16px; animation-duration: 12.5s, 3.9s; animation-delay: -6.8s, -2.4s;"></span>
+<span class="gold-leaf-speck fleck-irregular" style="left: 68%; width: 2.6px; height: 2.0px; --dust-max-opacity: 0.58; --dust-sway: -21px; animation-duration: 9.5s, 3.0s; animation-delay: -4.2s, -1.3s;"></span>
+<span class="gold-leaf-speck" style="left: 79%; width: 1.3px; height: 1.3px; --dust-max-opacity: 0.38; --dust-sway: 17px; animation-duration: 13.5s, 4.1s; animation-delay: -10.4s, -2.9s;"></span>
+<span class="gold-leaf-speck fleck-irregular" style="left: 89%; width: 2.9px; height: 2.3px; --dust-max-opacity: 0.62; --dust-sway: -15px; animation-duration: 8.9s, 2.7s; animation-delay: -0.6s, -0.9s;"></span>
+<span class="gold-leaf-speck" style="left: 5%; width: 2.0px; height: 2.0px; --dust-max-opacity: 0.48; --dust-sway: 20px; animation-duration: 10.8s, 3.4s; animation-delay: -5.2s, -1.6s;"></span>
+<span class="gold-leaf-speck" style="left: 51%; width: 1.1px; height: 1.1px; --dust-max-opacity: 0.28; --dust-sway: -13px; animation-duration: 14.5s, 4.4s; animation-delay: -11.8s, -3.5s;"></span>
+</div>
+<!-- Subtle Ambient Navy & Gold Glow in background -->
+<div class="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-gradient-to-b from-primary/25 via-blue-900/30 to-transparent blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-gradient-to-t from-primary/15 to-transparent blur-3xl pointer-events-none"></div>
+<!-- Replayable Controls & Badge Header -->
+<div class="absolute top-5 inset-x-0 flex items-center justify-between px-6 pt-safe z-30">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="font-label-sm text-[10px] tracking-[0.25em] uppercase text-primary">Ceremonial Protocol</span>
+</div>
+<button class="px-3 py-1 rounded-full bg-surface-container-high/80 border border-primary/30 text-on-surface-variant hover:text-primary font-label-sm text-[10px] uppercase tracking-widest transition-colors backdrop-blur-md" id="skipEnvelopeBtn">
+      Skip Unseal
+    </button>
+</div>
+<!-- Envelope Container (Outer 3D shell) -->
+<div class="relative w-full max-w-[370px] aspect-[4/5] max-h-[560px] perspective-1000 select-none transition-all duration-700 ease-out z-20" id="envelopeWrapper">
+<!-- Outer Envelope Body in Deep Royal Navy -->
+<div class="relative w-full h-full rounded-2xl bg-gradient-to-b from-[#131c4e] via-[#0f1742] to-[#0a102e] border border-primary/40 shadow-[0_20px_50px_rgba(3,6,20,0.9),0_0_35px_rgba(229,169,60,0.15)] overflow-hidden flex flex-col justify-between p-6">
+<!-- Tactile Ochre Gold Filigree Border Inset -->
+<div class="absolute inset-2.5 rounded-xl border border-primary/25 pointer-events-none">
+<!-- Corner Ornaments -->
+<span class="absolute top-1 left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-primary"></span>
+<span class="absolute top-1 right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-primary"></span>
+<span class="absolute bottom-1 left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-primary"></span>
+<span class="absolute bottom-1 right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-primary"></span>
+</div>
+<!-- Top Debossed Brand Typography & Sinhala Subtitle -->
+<div class="relative z-10 text-center pt-2 space-y-1">
+<p class="font-label-sm text-[9px] tracking-[0.3em] uppercase text-primary font-semibold">Fibres • Fabrics • Fashion</p>
+<h2 class="font-headline-md text-[19px] text-[#f8f7f2] tracking-wider font-light uppercase">Edirisooriya Textiles</h2>
+<p class="font-sinhala text-[11px] tracking-wide text-secondary/90 font-medium">එදිරිසූරිය ටෙක්ස්ටයිල්</p>
+<div class="w-16 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mt-1"></div>
+</div>
+<!-- Center Envelope V-Fold Flap Visual & Debossed Creases -->
+<div class="relative w-full h-36 my-auto flex items-center justify-center">
+<!-- Envelope Fold Diagonal Lines Background -->
+<svg class="absolute inset-0 w-full h-full opacity-35 text-primary pointer-events-none" fill="none" preserveaspectratio="none" viewbox="0 0 320 144">
+<path d="M0,0 L160,86 L320,0" stroke="currentColor" stroke-dasharray="3 3" stroke-width="1.2"></path>
+<path d="M0,144 L160,66 L320,144" stroke="currentColor" stroke-width="1"></path>
+</svg>
+<!-- Top Triangular Flap with 3D Origin -->
+<div class="absolute top-0 inset-x-0 h-[105px] origin-top transform-style-3d transition-transform duration-700 ease-in-out z-20 pointer-events-none" id="envelopeFlap">
+<div class="w-full h-full relative">
+<svg class="w-full h-full drop-shadow-[0_8px_14px_rgba(3,6,20,0.85)]" fill="none" viewbox="0 0 320 105">
+<path d="M0 0 H320 L160 102 Z" fill="#18235e" stroke="#e5a93c" stroke-opacity="0.45" stroke-width="1"></path>
+<!-- Flap Inner Gold Accent line -->
+<path d="M12 6 H308 L160 94 Z" stroke="#e5a93c" stroke-opacity="0.25" stroke-width="0.8"></path>
+</svg>
+</div>
+</div>
+<!-- The Embossed Metallic Gold Wax Seal (Interactive Button) with Textile/Needle Motif -->
+<div class="relative z-30 flex flex-col items-center">
+<button aria-label="Unseal invitation" class="relative group cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/60 rounded-full transition-transform active:scale-95" id="waxSealBtn">
+<!-- Ambient Radiance Aura -->
+<div class="absolute -inset-4 rounded-full bg-primary/25 blur-xl group-hover:bg-primary/40 transition-all"></div>
+<!-- Wax Seal Disc in Warm Marigold / Ochre Gold -->
+<div class="relative w-24 h-24 rounded-full animate-wax-glow flex items-center justify-center transition-all duration-500 ease-out" id="waxSealDisc" style="background: radial-gradient(circle at 35% 30%, #ffe9b8 0%, #e5a93c 35%, #d99b26 65%, #8f5c09 100%); border: 3px solid rgba(255, 240, 195, 0.6);">
+<!-- Outer Chiseled Ornamental Ring -->
+<div class="absolute inset-1.5 rounded-full border border-[#8f5c09] shadow-[inset_0_2px_4px_rgba(15,23,66,0.6),0_1px_2px_rgba(255,255,255,0.45)] flex items-center justify-center">
+<!-- Tiny ornamental stitched dots inside seal -->
+<div class="absolute inset-1 rounded-full border border-dashed border-[#573500]/50"></div>
+<!-- Raised Monogram 'ET' with needle motif -->
+<div class="relative flex flex-col items-center justify-center drop-shadow-[0_2px_2px_rgba(15,23,66,0.85)] select-none">
+<!-- Textile needle icon line -->
+<svg class="w-7 h-3 text-[#0f1742] opacity-80 -mb-1" fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 10">
+<path d="M2 5 C 6 2, 10 8, 14 5 S 20 5, 22 5" stroke-linecap="round"></path>
+<circle cx="2" cy="5" fill="#0f1742" r="1.2"></circle>
+</svg>
+<span class="font-cinzel text-[24px] font-bold text-[#0f1742] tracking-normal leading-none" style="text-shadow: 1px 1px 0px rgba(255,245,215,0.45), -1px -1px 1px rgba(11,17,48,0.7);">ET</span>
+<span class="font-label-sm text-[6px] uppercase tracking-[0.22em] text-[#0f1742] font-black mt-0.5" style="text-shadow: 0.5px 0.5px 0px rgba(255,245,215,0.35);">TEXTILES</span>
+</div>
+</div>
+<!-- Wax molten edge irregular bevel dots -->
+<span class="absolute -top-1 right-3 w-3 h-2 rounded-full bg-[#d99b26] opacity-85 blur-[0.3px]"></span>
+<span class="absolute -bottom-1 left-4 w-3.5 h-2.5 rounded-full bg-[#8f5c09] opacity-85 blur-[0.3px]"></span>
+<span class="absolute top-6 -left-1 w-2.5 h-3 rounded-full bg-[#e5a93c] opacity-85 blur-[0.3px]"></span>
+</div>
+</button>
+<!-- Interactive Invitation Prompt -->
+<div class="mt-4 flex flex-col items-center gap-1 animate-prompt-pulse text-center pointer-events-none" id="sealPrompt">
+<span class="font-label-sm text-[11px] text-primary uppercase tracking-[0.25em] font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">touch_app</span>
+              Tap Seal to Open
+            </span>
+<span class="font-body-md text-[11px] text-on-surface-variant/90 italic font-light">Break golden textile seal to reveal inaugural gala</span>
+</div>
+</div>
+</div>
+<!-- Bottom Guest Credential -->
+<div class="relative z-10 text-center pb-2 border-t border-primary/20 pt-3">
+<p class="font-label-sm text-[9px] uppercase tracking-widest text-primary">Official Invitation Pass</p>
+<p class="font-headline-md text-[14px] text-[#f8f7f2] mt-0.5 tracking-wide">Cordially Welcoming Our Honored Guests &amp; Patrons</p>
+<p class="font-label-sm text-[8px] text-on-surface-variant/80 uppercase tracking-[0.2em] mt-1">Heritage Flagship Salon • Grand Opening Gala</p>
+</div>
+</div>
+</div>
+</div>
+<header class="fixed top-0 w-full z-50 pt-safe bg-[#0b1130]/90 backdrop-blur-xl border-b border-primary/20 shadow-[0_4px_20px_rgba(7,11,32,0.6)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-2.5">
+<!-- Brand Logo Card -->
+<div class="h-9 flex items-center justify-center">
+<img alt="Edirisooriya Textiles Logo" class="h-7 w-auto object-contain drop-shadow-[0_1px_6px_rgba(229,169,60,0.35)]" src="logo-gold.png"/>
+</div>
+<div class="flex flex-col border-l border-primary/20 pl-2.5 ml-1">
+<span class="font-label-sm text-[10px] uppercase tracking-widest text-primary font-bold leading-tight">Edirisooriya</span>
+<span class="font-sinhala text-[9px] text-on-surface-variant leading-none">ටෙක්ස්ටයිල්</span>
+</div>
+</div><div class="flex items-center gap-space-xs"><span class="font-headline-md text-[16px] italic text-primary px-space-xs hidden sm:inline">Ceremony Gala</span></div><div class="flex items-center gap-space-xs"><button aria-label="Re-seal Invitation" class="w-10 h-10 rounded-full flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors" id="reSealBtnHeader" title="View Luxury Envelope"><span class="material-symbols-outlined text-[20px]">drafts</span></button><button aria-label="Invitation Sound" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">graphic_eq</span></button><button aria-label="Share Invitation" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">ios_share</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs text-on-primary font-semibold shadow-sm"><span class="material-symbols-outlined text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-20 bg-[#0b1130]"><div class="flex flex-col w-full">
+<!-- Specular Ambient Aura Overlay -->
+<div class="relative w-full max-w-[440px] mx-auto px-margin space-y-space-xl pb-12">
+<!-- 1. Editorial Intro Section -->
+<section class="flex flex-col items-center text-center pt-space-md">
+<!-- VIP Badge Pill & Quick Reseal Trigger -->
+<div class="flex items-center gap-2 mb-space-lg">
+<div class="inline-flex items-center gap-space-xs px-3.5 py-1.5 rounded-full bg-surface-container-high border border-primary/30 text-primary shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-semibold">VIP Pass • Flagship Gala</span>
+</div>
+<button class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary text-[10px] uppercase font-label-sm tracking-wider border border-primary/30 transition-colors" id="reSealPillBtn">
+<span class="material-symbols-outlined text-[13px] text-primary">mail_lock</span>
+<span>Re-seal</span>
+</button>
+</div>
+<!-- Prominent Brand Emblem Card -->
+<div class="w-full max-w-[340px] relative py-4 px-5 rounded-xl bg-gradient-to-b from-[#131c4e]/70 to-[#0f1742]/90 border border-primary/35 shadow-lg mb-space-md flex flex-col items-center justify-center">
+<img alt="Edirisooriya Textiles - Fibres Fabrics Fashion" class="w-full h-auto max-h-16 object-contain drop-shadow-[0_4px_12px_rgba(229,169,60,0.35)]" src="logo-gold.png"/>
+<span class="text-[9px] uppercase tracking-[0.25em] text-primary/80 font-semibold mt-2">Fibres • Fabrics • Fashion</span>
+</div>
+<!-- Architectural Arched Image Showcase with Navy/Gold Framing -->
+<div class="relative w-full aspect-[4/5] max-w-[320px] rounded-t-[160px] rounded-b-xl overflow-hidden shadow-2xl bg-surface-container-low mb-space-lg group border-2 border-primary/30">
+<!-- Inner Specular Framing -->
+<div class="absolute inset-0 bg-gradient-to-t from-[#0b1130] via-transparent to-primary/15 z-10 pointer-events-none"></div>
+<img alt="Edirisooriya Textiles Flagship Interior" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrixcN0w0VvWnPdymYX7U5BhqxpPRTD_gGcmqKYXZot94hOvNy1v5ZklkHr7IUWOnqEZQC-ABYAKCDextgWUf5qT_D5l09JQ2Q_YUt1rD5ViNutM8N3UjBXUArObRkAsbuk6lxLKE8nq4qD-gJa3WUhjG_op9durltFj3vHVE-oYSD40Ztl7Tmppozn-RcLKJlHfGGC6YnUK15P0txQG5J_GDa5gXI1h1qcfAUfmo"/>
+<div class="absolute bottom-3 inset-x-3 z-20 flex items-center justify-between px-3 py-2 rounded-lg bg-[#0b1130]/90 border border-primary/40 backdrop-blur-md">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]">verified</span>
+<span class="font-label-sm text-[10px] text-[#f8f7f2] tracking-wider uppercase">Heritage Debut</span>
+</div>
+<span class="font-label-sm text-[10px] text-primary font-bold tracking-widest">Grand Inauguration Gala</span>
+</div>
+</div>
+<!-- Editorial Headlines -->
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-[#f8f7f2] mb-space-sm font-normal">
+        Artisanal Fibres, Rich Weaves &amp; <span class="italic text-primary font-serif">Haute Fashion</span>
+</h1>
+<p class="font-sinhala text-[14px] text-secondary font-medium tracking-wide mb-1">
+        එදිරිසූරිය ටෙක්ස්ටයිල් • නවෝත්පාදන ප්‍රදර්ශනය
+</p>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[340px] font-light leading-relaxed">
+        You are cordially invited to celebrate the grand opening and debut textile collection of our flagship pavilion.
+      </p>
+<!-- Common Invitation Badge -->
+<div class="mt-space-md inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-low border border-primary/25">
+<span class="material-symbols-outlined text-[18px] text-primary">auto_awesome</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-[#f8f7f2]">Cordially Welcoming All Patrons &amp; Honored Guests</span>
+</div>
+</section>
+<!-- 2. Event Date, Time & Venue Keycard -->
+<section class="rounded-xl bg-surface-container-low p-space-lg shadow-xl relative overflow-hidden border border-primary/25">
+<!-- Subtle Ambient Tint -->
+<div class="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-primary/15 to-transparent pointer-events-none rounded-full blur-2xl"></div>
+<div class="relative z-10 space-y-space-md">
+<!-- Date Badge & Month -->
+<div class="flex items-center justify-between pb-space-sm border-b border-outline-variant">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary block font-semibold">Grand Inauguration Soirée</span>
+<span class="font-headline-md text-headline-md text-[#f8f7f2]">Friday, October 24</span>
+</div>
+<div class="w-12 h-12 rounded-lg bg-surface-container-high border border-primary/30 flex flex-col items-center justify-center text-center">
+<span class="font-label-sm text-label-sm text-primary uppercase leading-tight font-bold">Oct</span>
+<span class="font-headline-md text-headline-md text-[#f8f7f2] leading-none">24</span>
+</div>
+</div>
+<!-- Venue Details -->
+<div class="flex items-start gap-3 p-3 rounded-lg bg-[#070b20]/60 border border-primary/20 backdrop-blur-sm">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-[20px]">location_on</span>
+</div>
+<div class="min-w-0">
+<p class="font-label-lg text-label-lg text-[#f8f7f2] font-semibold truncate">Edirisooriya Grand Pavilion</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">450 Textile Boulevard, Suite 100</p>
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-wider mt-0.5 font-medium">Bespoke Loom Gallery • Level 2</p>
+</div>
+</div>
+<!-- Dress Code Badge -->
+<div class="flex items-center gap-2.5 p-3 rounded-lg bg-surface-container-high/60 border border-outline-variant">
+<span class="material-symbols-outlined text-[20px] text-primary">styler</span>
+<div class="min-w-0">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest block font-medium">Attire</span>
+<span class="font-body-md text-body-md text-[#f8f7f2] text-xs font-normal">Black Tie &amp; Ochre Gold / Royal Navy Accents</span>
+</div>
+</div>
+<!-- Quick Action CTAs -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs">
+<button class="flex items-center justify-center gap-2 py-3 px-3 rounded-lg bg-surface-container-high hover:bg-surface-container-highest border border-primary/30 text-[#f8f7f2] hover:text-primary transition-all text-center active:scale-[0.98]" id="calBtn">
+<span class="material-symbols-outlined text-[18px] text-primary">calendar_add_on</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Calendar</span>
+</button>
+<button class="flex items-center justify-center gap-2 py-3 px-3 rounded-lg bg-surface-container-high hover:bg-surface-container-highest border border-primary/30 text-[#f8f7f2] hover:text-primary transition-all text-center active:scale-[0.98]" id="mapBtn">
+<span class="material-symbols-outlined text-[18px] text-primary">near_me</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Directions</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 3. Evening Itinerary & Program Highlights -->
+<section class="space-y-space-md">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary font-semibold">Event Protocol</span>
+<h2 class="font-headline-md text-headline-md text-[#f8f7f2]">Evening Schedule</h2>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Oct 24 • Gala</span>
+</div>
+<div class="space-y-space-xs">
+<!-- Item 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low border border-primary/15 flex gap-4 items-start shadow-sm transition-all duration-300 hover:bg-surface-container">
+<div class="flex flex-col items-center">
+<span class="font-label-lg text-label-lg text-primary font-bold">18:30</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/80 uppercase">PM</span>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-label-lg text-label-lg text-[#f8f7f2] uppercase tracking-wide font-medium">Silk &amp; Champagne Reception</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs mt-0.5">Welcome flutes by Dom Pérignon paired with vintage caviar and artisanal textile displays.</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low border border-primary/15 flex gap-4 items-start shadow-sm transition-all duration-300 hover:bg-surface-container">
+<div class="flex flex-col items-center">
+<span class="font-label-lg text-label-lg text-primary font-bold">19:30</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/80 uppercase">PM</span>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-label-lg text-label-lg text-[#f8f7f2] uppercase tracking-wide font-medium">Ribbon Cutting &amp; Loom Exhibition</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs mt-0.5">Inaugural opening remarks by Managing Directors and an immersive walkthrough of signature weaves.</p>
+</div>
+</div>
+<!-- Item 3 Highlight -->
+<div class="p-space-md rounded-xl bg-surface-container-high border border-primary/40 flex gap-4 items-start shadow-md relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex flex-col items-center">
+<span class="font-label-lg text-label-lg text-primary font-bold">20:15</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/80 uppercase">PM</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-primary/20 text-primary font-label-sm text-label-sm mb-1 uppercase tracking-wider font-semibold">
+<span>Main Runway</span>
+</div>
+<h3 class="font-label-lg text-label-lg text-[#f8f7f2] uppercase tracking-wide font-semibold">Edirisooriya Heritage Runway Debut</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs mt-0.5">Unveiling of 28 bespoke textile silhouettes accompanied by live classical orchestra.</p>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="p-space-md rounded-xl bg-surface-container-low border border-primary/15 flex gap-4 items-start shadow-sm transition-all duration-300 hover:bg-surface-container">
+<div class="flex flex-col items-center">
+<span class="font-label-lg text-label-lg text-primary font-bold">21:00</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/80 uppercase">PM</span>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-label-lg text-label-lg text-[#f8f7f2] uppercase tracking-wide font-medium">Bespoke Fabric Gifting &amp; Digestifs</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs mt-0.5">Exclusive bespoke monogram swatches, handcrafted souvenir stoles, and evening mixology bar.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Visual Intermission Card -->
+<div class="w-full h-44 rounded-xl overflow-hidden relative shadow-lg border border-primary/30">
+<div class="w-full h-full bg-cover bg-center" data-alt="Editorial luxury atelier showcase featuring warm golden architectural lighting, champagne velvet seating, sculptural marble pedestals displaying haute couture jewelry and Italian leather handbags in a Madison Avenue boutique." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3aPoJoDy0gPkqq21i4sB50MA2E3ZqAfQIBt-JJbRCa9ZlAFPg1Xrl5j_YO07vzIGR_00T0PQKVAYzdjTa1q8RP7lpGUC0dXkzbg0ZXkZEgADffkK40aCzW3RcQKixLlGSTjLMFpctycmXLNqZCeZ7T69HUn-an08ptgqwQ72w7IhadTE1-41WFSdYqfwSQmDQ9uj9dIas-Gtn4m89l61bK222Kkjw6tIVAbjesCs')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0b1130]/95 via-[#0b1130]/40 to-transparent flex flex-col justify-end p-space-md">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-widest font-semibold">Fibres • Fabrics • Fashion</span>
+<span class="font-headline-md text-headline-md text-[#f8f7f2] italic">The Edirisooriya Craftsmanship</span>
+</div>
+</div>
+
+<!-- 5. Concierge & Valet Note -->
+<section class="rounded-xl bg-surface-container-low p-space-md space-y-space-sm shadow-md border border-primary/20">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-[20px]">directions_car</span>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg text-[#f8f7f2] uppercase tracking-wide font-medium">Complimentary Valet Service</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs mt-0.5">Private valet marshals positioned directly at the main porte-cochère. Reception check-in opens promptly at 18:00.</p>
+</div>
+</div>
+<div class="pt-space-xs flex items-center justify-between text-xs font-label-sm uppercase tracking-wider text-on-surface-variant">
+<a class="hover:text-primary transition-colors flex items-center gap-1.5 py-1" href="tel:+12125550199">
+<span class="material-symbols-outlined text-[16px] text-primary">call</span>
+<span>+1 (212) 555-0199</span>
+</a>
+<a class="hover:text-primary transition-colors flex items-center gap-1.5 py-1" href="mailto:concierge@edirisooriya-textiles.com">
+<span class="material-symbols-outlined text-[16px] text-primary">mail</span>
+<span>Concierge Desk</span>
+</a>
+</div>
+</section>
+<!-- Footer Colophon -->
+<footer class="text-center py-space-sm space-y-1">
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-widest font-semibold">Edirisooriya Textiles • Fibres • Fabrics • Fashion</p>
+<p class="font-sinhala text-[11px] text-on-surface-variant/80">එදිරිසූරිය ටෙක්ස්ටයිල් ප්‍රදර්ශනය</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant/50 tracking-wider">Strictly Non-Transferable Invitation</p>
+</footer>
+<audio id="bgmAudio" src="audio/classical-bgm.mp3" loop preload="auto"></audio>
+</main>
+<script>
+  (function() {
+    // Quick actions
+    document.getElementById('calBtn')?.addEventListener('click', function() {
+      alert('Event "Edirisooriya Textiles Grand Opening Soirée" added to device calendar.');
+    });
+    document.getElementById('mapBtn')?.addEventListener('click', function() {
+      window.open('https://maps.google.com/?q=450+Textile+Boulevard', '_blank');
+    });
+
+    // --- Interactive Wax Seal & Envelope Sequence ---
+    const overlay = document.getElementById('envelopeOverlay');
+    const envelopeWrapper = document.getElementById('envelopeWrapper');
+    const flap = document.getElementById('envelopeFlap');
+    const sealBtn = document.getElementById('waxSealBtn');
+    const sealDisc = document.getElementById('waxSealDisc');
+    const sealPrompt = document.getElementById('sealPrompt');
+    const skipBtn = document.getElementById('skipEnvelopeBtn');
+    const reSealHeader = document.getElementById('reSealBtnHeader');
+    const reSealPill = document.getElementById('reSealPillBtn');
+
+    let isAnimating = false;
+
+    function createSparkles(x, y) {
+      const container = document.body;
+      const count = 22;
+      for (let i = 0; i < count; i++) {
+        const spark = document.createElement('span');
+        spark.className = 'sparkle-particle z-[120]';
+        const size = Math.random() * 6 + 3;
+        spark.style.width = size + 'px';
+        spark.style.height = size + 'px';
+        spark.style.left = x + 'px';
+        spark.style.top = y + 'px';
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 95 + 35;
+        const destX = Math.cos(angle) * distance;
+        const destY = Math.sin(angle) * distance;
+        spark.style.setProperty('--tw-sparkle-target', `translate(${destX}px, ${destY}px) scale(0)`);
+        container.appendChild(spark);
+        setTimeout(() => spark.remove(), 780);
+      }
+    }
+
+    function openEnvelope() {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      // Play calm classical music
+      const bgm = document.getElementById('bgmAudio');
+      if (bgm) {
+        bgm.volume = 0;
+        bgm.play().then(() => {
+          let vol = 0;
+          const fade = setInterval(() => {
+            vol += 0.05;
+            if (vol >= 0.45) { vol = 0.45; clearInterval(fade); }
+            bgm.volume = vol;
+          }, 80);
+        }).catch(err => console.log('Audio autoplay interaction:', err));
+      }
+
+      // Particle effect at center of seal
+      if (sealDisc) {
+        const rect = sealDisc.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        createSparkles(centerX, centerY);
+        sealDisc.classList.remove('animate-wax-glow');
+        sealDisc.classList.add('seal-breaking');
+      }
+
+      if (sealPrompt) {
+        sealPrompt.style.opacity = '0';
+        sealPrompt.style.transition = 'opacity 0.3s ease';
+      }
+
+      // Step 1: Flap rotates open upwards
+      setTimeout(() => {
+        if (flap) flap.classList.add('flap-opened');
+      }, 350);
+
+      // Step 2: Envelope glides down gracefully
+      setTimeout(() => {
+        if (envelopeWrapper) {
+          envelopeWrapper.classList.add('envelope-slide-out');
+        }
+      }, 700);
+
+      // Step 3: Backdrop fades and overlay is removed from view
+      setTimeout(() => {
+        if (overlay) {
+          overlay.style.opacity = '0';
+          overlay.style.pointerEvents = 'none';
+        }
+      }, 1050);
+
+      setTimeout(() => {
+        if (overlay) overlay.classList.add('hidden');
+        isAnimating = false;
+      }, 1500);
+    }
+
+    function resealEnvelope() {
+      if (!overlay || isAnimating) return;
+      isAnimating = true;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Fade out classical music
+      const bgm = document.getElementById('bgmAudio');
+      if (bgm) {
+        let vol = bgm.volume;
+        const fade = setInterval(() => {
+          vol -= 0.08;
+          if (vol <= 0.02) { clearInterval(fade); bgm.pause(); }
+          else { bgm.volume = vol; }
+        }, 60);
+      }
+
+      // Reset styles
+      overlay.classList.remove('hidden');
+      overlay.style.pointerEvents = 'auto';
+      overlay.style.opacity = '1';
+
+      if (envelopeWrapper) {
+        envelopeWrapper.classList.remove('envelope-slide-out');
+      }
+      if (flap) {
+        flap.classList.remove('flap-opened');
+      }
+      if (sealDisc) {
+        sealDisc.classList.remove('seal-breaking');
+        sealDisc.classList.add('animate-wax-glow');
+      }
+      if (sealPrompt) {
+        sealPrompt.style.opacity = '1';
+      }
+
+      setTimeout(() => {
+        isAnimating = false;
+      }, 600);
+    }
+
+    sealBtn?.addEventListener('click', openEnvelope);
+    skipBtn?.addEventListener('click', openEnvelope);
+    reSealHeader?.addEventListener('click', resealEnvelope);
+    reSealPill?.addEventListener('click', resealEnvelope);
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-[#0b1130]/90 border-t border-primary/20 backdrop-blur-xl shadow-[0_-4px_24px_rgba(7,11,32,0.7)]" data-active-classes="text-primary font-medium"><div class="flex justify-around items-center h-20 px-margin"><a aria-current="page" class="flex flex-col items-center justify-center gap-space-xs min-w-[56px] min-h-[44px] transition-colors text-primary font-medium" data-path="ceremony-overview" href="#"><span class="material-symbols-outlined text-[22px]">markunread_mailbox</span><span class="font-label-sm text-label-sm uppercase font-semibold">Invitation</span></a><a class="flex flex-col items-center justify-center gap-space-xs min-w-[56px] min-h-[44px] text-on-surface-variant hover:text-primary transition-colors" data-path="venue-details" href="#venue"><span class="material-symbols-outlined text-[22px]">location_on</span><span class="font-label-sm text-label-sm uppercase">Venue</span></a><a class="flex flex-col items-center justify-center gap-space-xs min-w-[56px] min-h-[44px] text-on-surface-variant hover:text-primary transition-colors" data-path="event-itinerary" href="#program"><span class="material-symbols-outlined text-[22px]">schedule</span><span class="font-label-sm text-label-sm uppercase">Program</span></a><a class="flex flex-col items-center justify-center gap-space-xs min-w-[56px] min-h-[44px] text-on-surface-variant hover:text-primary transition-colors" data-path="concierge-details" href="#concierge"><span class="material-symbols-outlined text-[22px]">room_service</span><span class="font-label-sm text-label-sm uppercase">Concierge</span></a></div></nav></body></html>
