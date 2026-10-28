@@ -15,13 +15,7 @@ const C = {
   phone: "94774757189",
   phoneShow: "+94 77 475 7189",
   ribbon: "6:35 AM — Auspicious Inauguration & Milk Boiling (Facing South / දකුණ බලා)",
-  firstSale: "8:51 AM — Commencement of Sales & Business (Facing North / උතුරු දිශාව බලා)",
-  offers: [
-    "New arrivals in sarees, dress materials, shirting and suiting",
-    "Opening day discounts on every purchase",
-    "A free gift for the first 100 customers",
-    "Fabric matching and tailoring advice from our team"
-  ]
+  firstSale: "8:51 AM — Commencement of Sales & Business (Facing North / උතුරු දිශාව බලා)"
 };
 
 const startDate = new Date(C.start);
@@ -40,11 +34,54 @@ function SplitWords({ text }) {
   );
 }
 
+// Synthesize an auspicious ceremonial harp & chime flourish via Web Audio API
+const playCeremonialChime = () => {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    if (ctx.state === "suspended") {
+      ctx.resume();
+    }
+
+    // Auspicious pentatonic resonant harmonics: C5, E5, G5, B5, C6, E6, G6
+    const notes = [
+      { f: 523.25, t: 0.0, d: 2.0 },  // C5
+      { f: 659.25, t: 0.12, d: 2.0 }, // E5
+      { f: 783.99, t: 0.24, d: 2.2 }, // G5
+      { f: 987.77, t: 0.36, d: 2.4 }, // B5
+      { f: 1046.50, t: 0.50, d: 2.6 },// C6
+      { f: 1318.51, t: 0.65, d: 2.8 },// E6
+      { f: 1567.98, t: 0.82, d: 3.2 } // G6
+    ];
+
+    notes.forEach(({ f, t, d }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(f, ctx.currentTime + t);
+
+      gain.gain.setValueAtTime(0, ctx.currentTime + t);
+      gain.gain.linearRampToValueAtTime(0.14, ctx.currentTime + t + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + t + d);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(ctx.currentTime + t);
+      osc.stop(ctx.currentTime + t + d);
+    });
+  } catch (err) {
+    console.log("Audio chime note:", err);
+  }
+};
+
 export default function Home() {
-  const [guests, setGuests] = useState("1");
   const [introState, setIntroState] = useState("idle"); // idle | open | gone
   const [heroRevealed, setHeroRevealed] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   // Countdown state
   const [counts, setCounts] = useState(["0", "0", "0", "0"]);
@@ -53,6 +90,8 @@ export default function Home() {
   const bigdayRef = useRef(null);
   const heroRef = useRef(null);
   const progRef = useRef(null);
+  const bgmAudioRef = useRef(null);
+  const fadeTimerRef = useRef(null);
 
   const tm = (d) =>
     d.toLocaleTimeString("en-GB", { hour: "numeric", minute: "2-digit", hour12: true });
@@ -79,7 +118,7 @@ export default function Home() {
   )}&location=${encodeURIComponent(C.mapUrl)}`;
 
   const waHref = `https://wa.me/${C.phone}?text=${encodeURIComponent(
-    `Hello ${C.contactPerson}! I will attend the grand opening of ${C.shop} on ${dateStr}. Guests: ${guests}.`
+    `Hello ${C.contactPerson}! I would like to inquire about the grand opening of ${C.shop} on ${dateStr}.`
   )}`;
 
   // Share handler
@@ -91,12 +130,67 @@ export default function Home() {
       url: typeof window !== "undefined" ? window.location.href : ""
     };
     if (typeof navigator !== "undefined" && navigator.share) {
-      navigator.share(data).catch(() => { });
+      navigator.share(data).catch(() => {});
     } else {
       window.open(
         `https://wa.me/?text=${encodeURIComponent(data.text + " " + data.url)}`,
         "_blank"
       );
+    }
+  };
+
+  // Start calm classical music with smooth fade-in
+  const startClassicalMusic = useCallback(() => {
+    if (!bgmAudioRef.current) return;
+    try {
+      if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
+      bgmAudioRef.current.volume = 0;
+      const playPromise = bgmAudioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsMusicPlaying(true);
+            let currentVol = 0;
+            fadeTimerRef.current = setInterval(() => {
+              currentVol += 0.02;
+              if (currentVol >= 0.38) {
+                currentVol = 0.38;
+                if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
+              }
+              if (bgmAudioRef.current) bgmAudioRef.current.volume = currentVol;
+            }, 80);
+          })
+          .catch((err) => {
+            console.log("Music waiting for interaction:", err);
+          });
+      }
+    } catch (err) {
+      console.log("Audio error:", err);
+    }
+  }, []);
+
+  // Toggle classical music play / pause
+  const toggleMusic = () => {
+    if (!bgmAudioRef.current) return;
+    if (isMusicPlaying) {
+      // Smooth fade out
+      let currentVol = bgmAudioRef.current.volume;
+      if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
+      fadeTimerRef.current = setInterval(() => {
+        currentVol -= 0.04;
+        if (currentVol <= 0.02) {
+          if (fadeTimerRef.current) clearInterval(fadeTimerRef.current);
+          if (bgmAudioRef.current) {
+            bgmAudioRef.current.pause();
+            bgmAudioRef.current.volume = 0;
+          }
+          setIsMusicPlaying(false);
+        } else {
+          if (bgmAudioRef.current) bgmAudioRef.current.volume = currentVol;
+        }
+      }, 50);
+    } else {
+      startClassicalMusic();
     }
   };
 
@@ -107,6 +201,12 @@ export default function Home() {
       return "open";
     });
 
+    // Play auspicious ceremonial chime flourish
+    playCeremonialChime();
+
+    // Start classical background music with smooth fade-in
+    startClassicalMusic();
+
     setTimeout(() => {
       document.body.classList.remove("lock");
       document.body.classList.add("live");
@@ -116,7 +216,7 @@ export default function Home() {
     setTimeout(() => {
       setIntroState("gone");
     }, 2200);
-  }, []);
+  }, [startClassicalMusic]);
 
   // Setup client listeners, countdown, and scroll handling
   useEffect(() => {
@@ -219,6 +319,29 @@ export default function Home() {
 
   return (
     <>
+      {/* Background Classical Audio Element */}
+      <audio
+        ref={bgmAudioRef}
+        src="/audio/classical-bgm.mp3"
+        loop
+        preload="auto"
+      />
+
+      {/* Floating Audio Controller */}
+      <button
+        className="music-btn"
+        onClick={toggleMusic}
+        title={isMusicPlaying ? "Mute Background Music" : "Play Classical Music"}
+        aria-label="Toggle Classical Music"
+      >
+        <span className={`music-bars ${isMusicPlaying ? "active" : ""}`}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span>{isMusicPlaying ? "Music: On" : "Music: Off"}</span>
+      </button>
+
       {/* Cinematic Vignette, Bars, and Progress Line */}
       <div className="vig" aria-hidden="true"></div>
       <div className="bar t" aria-hidden="true"></div>
@@ -228,8 +351,9 @@ export default function Home() {
       {/* Intro Curtain Screen */}
       <div
         id="intro"
-        className={`${introState === "open" ? "open" : ""} ${introState === "gone" ? "gone" : ""
-          }`}
+        className={`${introState === "open" ? "open" : ""} ${
+          introState === "gone" ? "gone" : ""
+        }`}
       >
         <div className="cur l"></div>
         <div className="cur r"></div>
@@ -244,6 +368,9 @@ export default function Home() {
           />
           <i></i>
           <p>You are cordially invited</p>
+          <button className="intro-enter-btn" onClick={begin}>
+            <span>Open Invitation ✦</span>
+          </button>
         </div>
         <button id="skip" onClick={begin}>
           Skip intro
@@ -271,9 +398,9 @@ export default function Home() {
           </p>
           <a
             className={`btn main rv ${heroRevealed ? "in" : ""}`}
-            href="#rsvp"
+            href="#schedule"
           >
-            Reserve your place
+            View Auspicious Times
           </a>
         </div>
         <svg
@@ -287,7 +414,7 @@ export default function Home() {
       </header>
 
       {/* Date & Auspicious Times (සුභ මුහුර්ත) Section */}
-      <section className="scene">
+      <section className="scene" id="schedule">
         <div className="wrap">
           <div className="date">
             <div id="bigday" ref={bigdayRef} data-par aria-hidden="true">
@@ -365,6 +492,37 @@ export default function Home() {
               </p>
             </div>
           </div>
+
+          {/* Quick Action Buttons */}
+          <div className="acts rv" style={{ marginTop: "2.5rem" }}>
+            <a
+              className="btn main"
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Inquire on WhatsApp
+            </a>
+            <a
+              className="btn alt"
+              href={calHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Add to Calendar
+            </a>
+            <a
+              className="btn alt"
+              href={C.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on Google Maps
+            </a>
+            <a className="btn alt" href="#" onClick={handleShare}>
+              Share Invitation
+            </a>
+          </div>
         </div>
       </section>
 
@@ -389,79 +547,6 @@ export default function Home() {
               ? "We are now officially open. Welcome to Edirisooriya Textiles!"
               : "Until the auspicious ribbon is cut (6:35 AM)"}
           </p>
-        </div>
-      </section>
-
-      {/* Highlights / Offers Section */}
-      <section className="scene">
-        <div className="wrap">
-          <h2 className="h2 sp">
-            <SplitWords text="What’s waiting inside" />
-          </h2>
-          <ul className="list" id="offers">
-            {C.offers.map((offer, idx) => (
-              <li key={idx} className="rv">
-                {offer}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* RSVP Section */}
-      <section className="scene" id="rsvp">
-        <div className="wrap">
-          <h2 className="h2 sp">
-            <SplitWords text="Be there for the auspicious day" />
-          </h2>
-          <div className="rsvp rv">
-            <div>
-              <label htmlFor="guests">Number of Guests</label>
-              <select
-                id="guests"
-                value={guests}
-                onChange={(e) => setGuests(e.target.value)}
-              >
-                <option value="1">1 Person</option>
-                <option value="2">2 Persons</option>
-                <option value="3">3 Persons</option>
-                <option value="4">4 Persons</option>
-                <option value="5+">5+ Persons</option>
-              </select>
-            </div>
-            <div className="acts">
-              <a
-                className="btn main"
-                id="wa"
-                href={waHref}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Reply on WhatsApp
-              </a>
-              <a
-                className="btn alt"
-                id="cal"
-                href={calHref}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Add to calendar
-              </a>
-              <a
-                className="btn alt"
-                id="map"
-                href={C.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View on Google Maps
-              </a>
-              <a className="btn alt" id="share" href="#" onClick={handleShare}>
-                Share invitation
-              </a>
-            </div>
-          </div>
         </div>
       </section>
 
