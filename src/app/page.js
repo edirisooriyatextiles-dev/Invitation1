@@ -6,12 +6,16 @@ import Image from "next/image";
 /* ===== Configurable details ===== */
 const C = {
   shop: "Edirisooriya Textiles",
+  contactPerson: "Yasiru Dilshan",
   start: "2026-10-30T06:35:00",
-  end: "2026-10-30T18:00:00",
-  address: "No. 00, Main Street, Your Town",
-  phone: "94770000000",
-  phoneShow: "+94 77 000 0000",
-  ribbon: "6:35 AM, at the auspicious time",
+  end: "2026-10-30T20:00:00",
+  salesStart: "2026-10-30T08:51:00",
+  address: "Edirisooriya Textiles",
+  mapUrl: "https://maps.app.goo.gl/3Xwv1k4fLvc3zG526",
+  phone: "94774757189",
+  phoneShow: "+94 77 475 7189",
+  ribbon: "6:35 AM — Auspicious Inauguration & Milk Boiling (Facing South / දකුණ බලා)",
+  firstSale: "8:51 AM — Commencement of Sales & Business (Facing North / උතුරු දිශාව බලා)",
   offers: [
     "New arrivals in sarees, dress materials, shirting and suiting",
     "Opening day discounts on every purchase",
@@ -64,25 +68,26 @@ export default function Home() {
   const monthStr = startDate.toLocaleDateString("en-GB", { month: "long" });
   const bigDayNum = startDate.getDate();
   const yearStr = `${startDate.getFullYear()}, ${tm(startDate)}`;
-  const whenStr = `${dateStr}, ${tm(startDate)} to ${tm(endDate)}`;
+  const whenStr = `${dateStr}, ${tm(startDate)} onwards`;
 
   // Formatting for Google Calendar dates
   const formatCalDate = (d) => d.toISOString().replace(/[-:]|\.\d{3}/g, "");
   const calHref = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-    C.shop + " grand opening"
-  )}&dates=${formatCalDate(startDate)}/${formatCalDate(endDate)}&location=${encodeURIComponent(
-    C.address
-  )}`;
+    C.shop + " — Grand Opening Ceremony"
+  )}&dates=${formatCalDate(startDate)}/${formatCalDate(endDate)}&details=${encodeURIComponent(
+    `Grand Opening of ${C.shop}\n\nAuspicious Times (ශුභ මුහුර්ත):\n• 6:35 AM: Inaugural Opening & Traditional Milk Boiling (කිරි ඉතිරවීම) - Facing South\n• 8:51 AM: Commencement of Commercial Sales & First Transactions (මුල් ගනුදෙනුව) - Facing North\n\nContact: ${C.contactPerson} (${C.phoneShow})\nLocation: ${C.mapUrl}`
+  )}&location=${encodeURIComponent(C.mapUrl)}`;
 
   const waHref = `https://wa.me/${C.phone}?text=${encodeURIComponent(
-    `Hello! I will attend the grand opening of ${C.shop} on ${dateStr}. Guests: ${guests}.`
+    `Hello ${C.contactPerson}! I will attend the grand opening of ${C.shop} on ${dateStr}. Guests: ${guests}.`
   )}`;
 
+  // Share handler
   const handleShare = (e) => {
     e.preventDefault();
     const data = {
-      title: C.shop,
-      text: `You’re invited to the grand opening of ${C.shop} on ${dateStr}.`,
+      title: `${C.shop} — Grand Opening`,
+      text: `You’re invited to the grand opening of ${C.shop} on ${dateStr}. Contact: ${C.contactPerson} (${C.phoneShow})`,
       url: typeof window !== "undefined" ? window.location.href : ""
     };
     if (typeof navigator !== "undefined" && navigator.share) {
@@ -239,7 +244,7 @@ export default function Home() {
             style={{ width: "min(260px, 62vw)", height: "auto" }}
           />
           <i></i>
-          <p>You are invited</p>
+          <p>You are cordially invited</p>
         </div>
         <button id="skip" onClick={begin}>
           Skip intro
@@ -263,7 +268,7 @@ export default function Home() {
             <SplitWords text={C.shop} />
           </h1>
           <p className={`lead rv ${heroRevealed ? "in" : ""}`}>
-            Join us for our grand opening.
+            Join us for our auspicious grand opening ceremony.
           </p>
           <a
             className={`btn main rv ${heroRevealed ? "in" : ""}`}
@@ -282,7 +287,7 @@ export default function Home() {
         </svg>
       </header>
 
-      {/* Date & Key Information */}
+      {/* Date & Auspicious Times (සුභ මුහුර්ත) Section */}
       <section className="scene">
         <div className="wrap">
           <div className="date">
@@ -296,16 +301,69 @@ export default function Home() {
           </div>
           <div className="facts">
             <div className="rv">
-              <b>When</b>
-              <p id="when">{whenStr}</p>
+              <b>Date & Auspicious Day</b>
+              <p id="when">
+                {whenStr}
+                <span style={{ display: "block", color: "var(--mute)", fontSize: "0.9rem", marginTop: "4px" }}>
+                  2026 ඔක්තෝබර් මස 30 වන සිකුරාදා
+                </span>
+              </p>
             </div>
             <div className="rv">
-              <b>Where</b>
-              <p id="where">{C.address}</p>
+              <b>Auspicious Opening & Milk Boiling (සුභ මුහුර්තය)</b>
+              <p id="rib">
+                {C.ribbon}
+                <span style={{ display: "block", color: "var(--mute)", fontSize: "0.9rem", marginTop: "4px" }}>
+                  පෙ.ව. 6.35 — ආයතන වහලක් යටදී කිරි ඉතිරවීම යහපති (දකුණ බලා)
+                </span>
+              </p>
             </div>
             <div className="rv">
-              <b>Ribbon cutting</b>
-              <p id="rib">{C.ribbon}</p>
+              <b>Commercial Sales Inauguration (අලවි කටයුතු)</b>
+              <p>
+                {C.firstSale}
+                <span style={{ display: "block", color: "var(--mute)", fontSize: "0.9rem", marginTop: "4px" }}>
+                  පෙ.ව. 8.51 — උතුරු දිශාව බලා ව්‍යාපාරයේ මුල් අලවි කටයුතු ඇරඹීම
+                </span>
+              </p>
+            </div>
+            <div className="rv">
+              <b>Location & Directions</b>
+              <p id="where">
+                {C.address}
+                <a
+                  href={C.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    color: "var(--gold)",
+                    marginTop: "6px",
+                    fontWeight: 600,
+                    fontSize: "0.95rem",
+                    textDecoration: "underline",
+                    textUnderlineOffset: "3px"
+                  }}
+                >
+                  📍 Open in Google Maps
+                </a>
+              </p>
+            </div>
+            <div className="rv">
+              <b>Inquiries & Contact Person</b>
+              <p>
+                <span style={{ fontWeight: 600, color: "var(--ink)", display: "block" }}>
+                  {C.contactPerson}
+                </span>
+                <a
+                  href={`tel:${C.phoneShow.replace(/\s+/g, "")}`}
+                  style={{ color: "var(--gold)", textDecoration: "none" }}
+                >
+                  {C.phoneShow}
+                </a>
+              </p>
             </div>
           </div>
         </div>
@@ -328,7 +386,9 @@ export default function Home() {
             </div>
           ) : null}
           <p className="cnote rv" id="countnote">
-            {isExpired ? "We are open. Come and visit us." : "Until the ribbon is cut"}
+            {isExpired
+              ? "We are now officially open. Welcome to Edirisooriya Textiles!"
+              : "Until the auspicious ribbon is cut (6:35 AM)"}
           </p>
         </div>
       </section>
@@ -353,21 +413,21 @@ export default function Home() {
       <section className="scene" id="rsvp">
         <div className="wrap">
           <h2 className="h2 sp">
-            <SplitWords text="Be there for the first day" />
+            <SplitWords text="Be there for the auspicious day" />
           </h2>
           <div className="rsvp rv">
             <div>
-              <label htmlFor="guests">Guests</label>
+              <label htmlFor="guests">Number of Guests</label>
               <select
                 id="guests"
                 value={guests}
                 onChange={(e) => setGuests(e.target.value)}
               >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5+">5+</option>
+                <option value="1">1 Person</option>
+                <option value="2">2 Persons</option>
+                <option value="3">3 Persons</option>
+                <option value="4">4 Persons</option>
+                <option value="5+">5+ Persons</option>
               </select>
             </div>
             <div className="acts">
@@ -389,6 +449,15 @@ export default function Home() {
               >
                 Add to calendar
               </a>
+              <a
+                className="btn alt"
+                id="map"
+                href={C.mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on Google Maps
+              </a>
               <a className="btn alt" id="share" href="#" onClick={handleShare}>
                 Share invitation
               </a>
@@ -400,9 +469,28 @@ export default function Home() {
       {/* Footer */}
       <footer>
         <h2 id="fshop">{C.shop}</h2>
-        <p id="faddr">{C.address}</p>
-        <p id="fphone">{C.phoneShow}</p>
-        <p>Fibres • Fabrics • Fashion</p>
+        <p>
+          <a
+            href={C.mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "var(--mute)", textDecoration: "none" }}
+          >
+            📍 {C.address} — View Location on Google Maps
+          </a>
+        </p>
+        <p>
+          Contact: <strong>{C.contactPerson}</strong> •{" "}
+          <a
+            href={`tel:${C.phoneShow.replace(/\s+/g, "")}`}
+            style={{ color: "var(--gold)", textDecoration: "none" }}
+          >
+            {C.phoneShow}
+          </a>
+        </p>
+        <p style={{ marginTop: "12px", letterSpacing: "0.08em", fontSize: "0.95rem" }}>
+          Fibres • Fabrics • Fashion
+        </p>
       </footer>
     </>
   );

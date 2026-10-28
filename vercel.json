@@ -1,5 +1,3 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "name": "invitation1",
   "framework": "nextjs"
 }
