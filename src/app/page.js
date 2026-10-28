@@ -15,13 +15,7 @@ const C = {
   phone: "94774757189",
   phoneShow: "+94 77 475 7189",
   ribbon: "6:35 AM — Auspicious Inauguration & Milk Boiling (Facing South / දකුණ බලා)",
-  firstSale: "8:51 AM — Commencement of Sales & Business (Facing North / උතුරු දිශාව බලා)",
-  offers: [
-    "New arrivals in sarees, dress materials, shirting and suiting",
-    "Opening day discounts on every purchase",
-    "A free gift for the first 100 customers",
-    "Fabric matching and tailoring advice from our team"
-  ]
+  firstSale: "8:51 AM — Commencement of Sales & Business (Facing North / උතුරු දිශාව බලා)"
 };
 
 const startDate = new Date(C.start);
@@ -41,7 +35,6 @@ function SplitWords({ text }) {
 }
 
 export default function Home() {
-  const [guests, setGuests] = useState("1");
   const [introState, setIntroState] = useState("idle"); // idle | open | gone
   const [heroRevealed, setHeroRevealed] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
@@ -79,7 +72,7 @@ export default function Home() {
   )}&location=${encodeURIComponent(C.mapUrl)}`;
 
   const waHref = `https://wa.me/${C.phone}?text=${encodeURIComponent(
-    `Hello ${C.contactPerson}! I will attend the grand opening of ${C.shop} on ${dateStr}. Guests: ${guests}.`
+    `Hello ${C.contactPerson}! I would like to inquire about the grand opening of ${C.shop} on ${dateStr}.`
   )}`;
 
   // Share handler
@@ -272,9 +265,9 @@ export default function Home() {
           </p>
           <a
             className={`btn main rv ${heroRevealed ? "in" : ""}`}
-            href="#rsvp"
+            href="#schedule"
           >
-            Reserve your place
+            View Auspicious Times
           </a>
         </div>
         <svg
@@ -288,7 +281,7 @@ export default function Home() {
       </header>
 
       {/* Date & Auspicious Times (සුභ මුහුර්ත) Section */}
-      <section className="scene">
+      <section className="scene" id="schedule">
         <div className="wrap">
           <div className="date">
             <div id="bigday" ref={bigdayRef} data-par aria-hidden="true">
@@ -366,6 +359,37 @@ export default function Home() {
               </p>
             </div>
           </div>
+
+          {/* Quick Action Buttons */}
+          <div className="acts rv" style={{ marginTop: "2.5rem" }}>
+            <a
+              className="btn main"
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Inquire on WhatsApp
+            </a>
+            <a
+              className="btn alt"
+              href={calHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Add to Calendar
+            </a>
+            <a
+              className="btn alt"
+              href={C.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on Google Maps
+            </a>
+            <a className="btn alt" href="#" onClick={handleShare}>
+              Share Invitation
+            </a>
+          </div>
         </div>
       </section>
 
@@ -390,79 +414,6 @@ export default function Home() {
               ? "We are now officially open. Welcome to Edirisooriya Textiles!"
               : "Until the auspicious ribbon is cut (6:35 AM)"}
           </p>
-        </div>
-      </section>
-
-      {/* Highlights / Offers Section */}
-      <section className="scene">
-        <div className="wrap">
-          <h2 className="h2 sp">
-            <SplitWords text="What’s waiting inside" />
-          </h2>
-          <ul className="list" id="offers">
-            {C.offers.map((offer, idx) => (
-              <li key={idx} className="rv">
-                {offer}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* RSVP Section */}
-      <section className="scene" id="rsvp">
-        <div className="wrap">
-          <h2 className="h2 sp">
-            <SplitWords text="Be there for the auspicious day" />
-          </h2>
-          <div className="rsvp rv">
-            <div>
-              <label htmlFor="guests">Number of Guests</label>
-              <select
-                id="guests"
-                value={guests}
-                onChange={(e) => setGuests(e.target.value)}
-              >
-                <option value="1">1 Person</option>
-                <option value="2">2 Persons</option>
-                <option value="3">3 Persons</option>
-                <option value="4">4 Persons</option>
-                <option value="5+">5+ Persons</option>
-              </select>
-            </div>
-            <div className="acts">
-              <a
-                className="btn main"
-                id="wa"
-                href={waHref}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Reply on WhatsApp
-              </a>
-              <a
-                className="btn alt"
-                id="cal"
-                href={calHref}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Add to calendar
-              </a>
-              <a
-                className="btn alt"
-                id="map"
-                href={C.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View on Google Maps
-              </a>
-              <a className="btn alt" id="share" href="#" onClick={handleShare}>
-                Share invitation
-              </a>
-            </div>
-          </div>
         </div>
       </section>
 
