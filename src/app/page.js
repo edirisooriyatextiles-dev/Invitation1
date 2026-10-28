@@ -27,7 +27,7 @@ function SplitWords({ text }) {
     <>
       {words.map((w, i) => (
         <span key={i} className="w">
-          <i style={{ "--i": i }}>{w}</i>
+          <i style={{ "--i": i }}>{w}</i>{" "}
         </span>
       ))}
     </>
@@ -130,7 +130,7 @@ export default function Home() {
       url: typeof window !== "undefined" ? window.location.href : ""
     };
     if (typeof navigator !== "undefined" && navigator.share) {
-      navigator.share(data).catch(() => {});
+      navigator.share(data).catch(() => { });
     } else {
       window.open(
         `https://wa.me/?text=${encodeURIComponent(data.text + " " + data.url)}`,
@@ -351,9 +351,8 @@ export default function Home() {
       {/* Intro Curtain Screen */}
       <div
         id="intro"
-        className={`${introState === "open" ? "open" : ""} ${
-          introState === "gone" ? "gone" : ""
-        }`}
+        className={`${introState === "open" ? "open" : ""} ${introState === "gone" ? "gone" : ""
+          }`}
       >
         <div className="cur l"></div>
         <div className="cur r"></div>
@@ -530,7 +529,7 @@ export default function Home() {
       <section className="scene">
         <div className="wrap">
           <h2 className="h2 sp">
-            <SplitWords text="The door opening." />
+            <SplitWords text="The doors open in" />
           </h2>
           {!isExpired ? (
             <div className="count rv" id="count">
@@ -552,15 +551,6 @@ export default function Home() {
 
       {/* Footer */}
       <footer>
-        <div className="logo" style={{ marginBottom: "1.2rem" }}>
-          <Image
-            src="/logo.png"
-            alt={C.shop}
-            width={220}
-            height={55}
-            style={{ width: "min(220px, 52vw)", height: "auto" }}
-          />
-        </div>
         <h2 id="fshop">{C.shop}</h2>
         <p>
           <a
