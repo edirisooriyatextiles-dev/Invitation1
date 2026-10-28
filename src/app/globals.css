@@ -634,6 +634,11 @@ footer p {
   vertical-align: top;
   padding-bottom: .12em;
   margin-bottom: -.12em;
+  margin-right: 0.28em;
+}
+
+.w:last-child {
+  margin-right: 0;
 }
 
 .w > i {

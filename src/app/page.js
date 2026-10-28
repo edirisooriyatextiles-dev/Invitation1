@@ -27,7 +27,7 @@ function SplitWords({ text }) {
     <>
       {words.map((w, i) => (
         <span key={i} className="w">
-          <i style={{ "--i": i }}>{w}</i>{" "}
+          <i style={{ "--i": i }}>{w}</i>
         </span>
       ))}
     </>
@@ -530,7 +530,7 @@ export default function Home() {
       <section className="scene">
         <div className="wrap">
           <h2 className="h2 sp">
-            <SplitWords text="The doors open in" />
+            <SplitWords text="The door opening." />
           </h2>
           {!isExpired ? (
             <div className="count rv" id="count">
@@ -552,6 +552,15 @@ export default function Home() {
 
       {/* Footer */}
       <footer>
+        <div className="logo" style={{ marginBottom: "1.2rem" }}>
+          <Image
+            src="/logo.png"
+            alt={C.shop}
+            width={220}
+            height={55}
+            style={{ width: "min(220px, 52vw)", height: "auto" }}
+          />
+        </div>
         <h2 id="fshop">{C.shop}</h2>
         <p>
           <a
